@@ -2,6 +2,7 @@ package org.dest.file.transformations.swing;
 
 import java.awt.Font;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -61,6 +62,7 @@ public class NewTransformation extends JFrame {
         
         final JFileChooser fileChooser = new JFileChooser();
         fileChooser.setBounds(10, 200, 500, 400);
+        fileChooser.setCurrentDirectory(new File("D:/Projects- Softwares/FileTransformations/input files"));
         frameNewTransformation.add(fileChooser);
         
 //        final DefaultListModel model = new DefaultListModel() ;

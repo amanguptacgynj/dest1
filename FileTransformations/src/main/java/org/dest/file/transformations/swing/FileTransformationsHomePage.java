@@ -38,7 +38,7 @@ public class FileTransformationsHomePage {
         });
         fileMenu.add(OpenFile);
 
-        JMenuItem seatingArrangement = new JMenuItem("New Transformation");
+        JMenuItem seatingArrangement = new JMenuItem("CSV to CSV");
         seatingArrangement.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 AssignToTransientPanel((JFrame) new NewTransformation());
