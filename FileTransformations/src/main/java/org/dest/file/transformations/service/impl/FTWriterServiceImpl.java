@@ -14,10 +14,12 @@ import com.sun.javafx.collections.MappingChange.Map;
 
 public class FTWriterServiceImpl implements FTWriterService{
 
-	public void writeToFile(String numberOfColumns, String delimiter, String header, String fileName, String flagTrim) {
+	public void writeToFile(String numberOfColumns, String delimiter, String fileName, String header, String flagTrim) {
 		try {
 			File outputFile = new File(fileName+"_FTOutput");
 			FileWriter fw = new FileWriter(outputFile);
+			fw.write(header);
+			fw.write("\n");
 			BufferedReader br = new BufferedReader(new FileReader(fileName));
 			String line;
 			while((line = br.readLine()) != null)

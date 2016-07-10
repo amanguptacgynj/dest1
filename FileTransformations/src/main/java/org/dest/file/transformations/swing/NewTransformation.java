@@ -46,15 +46,6 @@ public class NewTransformation extends JFrame {
         textDelimiter.setBounds(10,85,100,30);
         frameNewTransformation.add(textDelimiter);
         
-        JLabel labelHeader = new JLabel("Enter the desired header format");
-        labelHeader.setFont(new Font("Times New Roman", Font.PLAIN, 14));
-        labelHeader.setBounds(10, 110, 320, 30) ;
-        frameNewTransformation.add(labelHeader) ;
-        
-        final JTextField textHeader = new JTextField();
-        textHeader.setBounds(10,135,300,30);
-        frameNewTransformation.add(textHeader);
-
         JButton buttonColumnsAndDelimiter; 
         buttonColumnsAndDelimiter = new JButton("Submit");
         buttonColumnsAndDelimiter.setBounds(10,170,100,20);
@@ -76,12 +67,11 @@ public class NewTransformation extends JFrame {
             public void actionPerformed(java.awt.event.ActionEvent ae) {
            	 String numberOfColumns = textNumberOfColumns.getText() ;
            	 String delimiter = textDelimiter.getText() ;
-           	 String header = textHeader.getText();
            	 String fileName = fileChooser.getSelectedFile().toString();
 				try {
 //					model.addElement("number of columns '"+numberOfColumns+"'");
 //					model.addElement("delimiter '"+delimiter+"'");
-					new AddDetails(numberOfColumns, delimiter, header, fileName);
+					new AddHeaders(numberOfColumns, delimiter, fileName);
 				}
 				catch (Exception e1) {
 //					model.addElement(e1.getMessage());

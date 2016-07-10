@@ -11,7 +11,6 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
-import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
 
 import org.dest.file.transformations.service.FTWriterService;
@@ -21,30 +20,25 @@ public class AddDetails extends JFrame {
 	
 	private static final long serialVersionUID = 524113322105380231L;
 
-	public AddDetails(String numberOfColumns, String delimiter, String header, String fileName)
+	public AddDetails(String numberOfColumns, String delimiter, String fileName, String header)
 	{
-		display(numberOfColumns, delimiter, header, fileName);
+		display(numberOfColumns, delimiter, fileName, header);
 	}
 	
 	public static JFrame frameAddDetails = new JFrame("Add Details");
 	
-	public static void display(final String numberOfColumns, final String delimiter, final String header, final String fileName)
+	public static void display(final String numberOfColumns, final String delimiter, final String fileName, final String header)
 	{
-		NewTransformation.frameNewTransformation.setVisible(false);
-		
-//		for(int i=0; i<(Integer.parseInt(numberOfColumns)); i++)
-//		{
-//			
-//		}
+		AddHeaders.frameAddHeaders.setVisible(false);
 		
         frameAddDetails.setBounds(150,150,500,500);
         frameAddDetails.setLayout(null);
         frameAddDetails.setLocationRelativeTo(null) ;
         
-        JLabel labelHeader = new JLabel("Do you want to trim all the values");
-        labelHeader.setFont(new Font("Times New Roman", Font.PLAIN, 14));
-        labelHeader.setBounds(10, 10, 320, 30) ;
-        frameAddDetails.add(labelHeader) ;
+        JLabel labelTrim = new JLabel("Do you want to trim all the values");
+        labelTrim.setFont(new Font("Times New Roman", Font.PLAIN, 14));
+        labelTrim.setBounds(10, 10, 320, 30) ;
+        frameAddDetails.add(labelTrim) ;
         
         final ButtonGroup buttonGroup = new ButtonGroup();
         final JRadioButton radioTrimYes = new JRadioButton("Yes");
@@ -84,29 +78,29 @@ public class AddDetails extends JFrame {
         
         final JFrame framePopUp = new JFrame();
         framePopUp.pack();
-//        framePopUp.setVisible(true);
 
         buttonColumnsAndDelimiter.addActionListener(new ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent ae) {
-//           	 String numberOfColumns = textNumberOfColumns.getText() ;
-//           	 String delimiter = textDelimiter.getText() ;
+            	model.addElement(numberOfColumns);
+            	model.addElement(delimiter);
+            	model.addElement(fileName);
+            	model.addElement(header);
             	String b = "no value";
 				try {
-//					for (Enumeration<AbstractButton> buttons = buttonGroup.getElements(); buttons.hasMoreElements();) {
-//			            AbstractButton button = buttons.nextElement();
-//
-//			            if (button.isSelected()) {
-//			                b = button.getText();
-//			            }
-//			        }
-//					FTWriterService ftWriter = new FTWriterServiceImpl();
-//					ftWriter.writeToFile(numberOfColumns, delimiter, header, fileName, b);
-					for(int i=0; i<Integer.valueOf(numberOfColumns); i++)
-					{
-						String name;
-						name = JOptionPane.showInputDialog(framePopUp, "What is your name", null);
-						System.out.println("name is "+name);
-					}
+					for (Enumeration<AbstractButton> buttons = buttonGroup.getElements(); buttons.hasMoreElements();) {
+			            AbstractButton button = buttons.nextElement();
+
+			            if (button.isSelected()) {
+			                b = button.getText();
+			            }
+			        }
+					FTWriterService ftWriter = new FTWriterServiceImpl();
+					ftWriter.writeToFile(numberOfColumns, delimiter, fileName, header, b);
+//					for(int i=0; i<Integer.valueOf(numberOfColumns); i++)
+//					{
+//						String name;
+//						name = JOptionPane.showInputDialog(framePopUp, "What is your name", null);
+//					}
 				}
 				catch (Exception e1) {
 					model.addElement(e1.getMessage());
