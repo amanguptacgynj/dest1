@@ -91,7 +91,7 @@ public class AddHeaders extends JFrame{
 					if(b.equals("Yes"))
 					{
 						String header="no header";
-						header = JOptionPane.showInputDialog(framePopUp, "What is your name", null);
+						header = JOptionPane.showInputDialog(framePopUp, "Provide the headers", null);
 						model.addElement(header);
 						new AddDetails(numberOfColumns, delimiter, fileName, header);
 					}

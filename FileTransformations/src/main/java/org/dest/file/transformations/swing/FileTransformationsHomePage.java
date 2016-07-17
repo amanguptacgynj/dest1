@@ -38,18 +38,23 @@ public class FileTransformationsHomePage {
         });
         fileMenu.add(OpenFile);
 
-        JMenuItem seatingArrangement = new JMenuItem("CSV to CSV");
-        seatingArrangement.addActionListener(new ActionListener() {
+        JMenuItem csvToCsv = new JMenuItem("CSV to CSV");
+        csvToCsv.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 AssignToTransientPanel((JFrame) new NewTransformation());
 //                Container content = mainFrame.getContentPane();
-//                content.removeAll();
-//                content.add(transientPanel);
-//                content.validate();
-//                content.repaint();
             }
        });
-       fileMenu.add(seatingArrangement);
+       fileMenu.add(csvToCsv);
+       
+       JMenuItem sample = new JMenuItem("sample");
+       sample.addActionListener(new ActionListener() {
+           public void actionPerformed(ActionEvent e) {
+               AssignToTransientPanel((JFrame) new NewTransformation());
+//               Container content = mainFrame.getContentPane();
+           }
+      });
+      fileMenu.add(sample);
 
        JMenuItem reserveSeats = new JMenuItem("Reserve Seat(s)");
        reserveSeats.addActionListener(new ActionListener() {

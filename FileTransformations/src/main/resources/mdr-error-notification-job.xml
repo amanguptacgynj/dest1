@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:batch="http://www.springframework.org/schema/batch" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:kohls="http://kohls.com/metadata/"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans.xsd
+http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context.xsd
+http://www.springframework.org/schema/mvc
+http://www.springframework.org/schema/mvc/spring-mvc.xsd
+http://www.springframework.org/schema/batch 
+http://www.springframework.org/schema/batch/spring-batch.xsd">
+
+	<context:annotation-config />
+	<context:component-scan base-package="com.kohls.mdr.error.notification.*" />
+
+	<bean id="itemReader"
+		class="org.springframework.batch.item.database.JpaPagingItemReader">
+		<property name="entityManagerFactory" ref="entityManagerFactory" />
+		<property name="queryString"
+			value="select zstsDatMdlDO from ZstsDatMdlDO zstsDatMdlDO WHERE zstsDatMdlDO.validationId = 'Y' " />
+		<property name="pageSize" value="${mdr.error.notification.page.size}" />
+	</bean>
+
+	<bean id="zstsDatMdlDO" class="com.kohls.mdr.error.notification.DO.ZstsDatMdlDO">
+	</bean>
+
+	<bean id="mdrErrorNotificationProcessor"
+		class="com.kohls.mdr.error.notification.processor.MdrErrorNotificationProcessor">
+		<property name="mdrErrorNotificationService" ref="mdrErrorNotificationServiceImpl" />
+	</bean>
+
+	<bean id="mdrErrorNotificationServiceImpl"
+		class="com.kohls.mdr.error.notification.service.impl.MdrErrorNotificationServiceImpl">
+		<property name="modelDAO" ref="modelDAO" />
+		<property name="zstsEnttDAO" ref="zstsEnttDAO" />
+		<property name="zstsAttrDAO" ref="zstsAttrDAO" />
+		<property name="zstsVldnRulDAO" ref="zstsVldnRulDAO" />
+		<property name="zstsVldnErrLogDAO" ref="zstsVldnErrLogDAO" />
+		<property name="metaSource" value="${mdr.error.notification.excel.metasource}" />
+	</bean>
+
+	<bean id="itemWriter"
+		class="com.kohls.mdr.error.notification.writer.MdrErrorNotificationWriter"
+		scope="step">
+		<property name="skipObserver" ref="skipObserver" />
+		<property name="modelDAO" ref="modelDAO" />
+		<property name="zstsEnttDAO" ref="zstsEnttDAO" />
+		<property name="zstsAttrDAO" ref="zstsAttrDAO" />
+		<property name="mdrErrorNotificationService" ref="mdrErrorNotificationServiceImpl" />
+		<property name="excelFilePath" value="${mdr.error.notification.excel.file.path}" />
+		<property name="excelFileName" value="${mdr.error.notification.excel.file.name}" />
+	</bean>
+
+	<bean id="modelDAO"
+		class="com.kohls.mdr.error.notification.dao.impl.ZstsDatMdDaoImpl"
+		scope="step">
+		<property name="entityDAO" ref="entityDAO" />
+	</bean>
+
+	<bean id="zstsEnttDAO"
+		class="com.kohls.mdr.error.notification.dao.impl.ZstsEnttDaoImpl"
+		scope="step">
+		<property name="entityDAO" ref="entityDAO" />
+	</bean>
+
+	<bean id="zstsAttrDAO"
+		class="com.kohls.mdr.error.notification.dao.impl.ZstsAttrDaoImpl"
+		scope="step">
+		<property name="entityDAO" ref="entityDAO" />
+	</bean>
+
+	<bean id="zstsVldnRulDAO"
+		class="com.kohls.mdr.error.notification.dao.impl.ZstsVldnRulDaoImpl"
+		scope="step">
+		<property name="entityDAO" ref="entityDAO" />
+	</bean>
+
+	<bean id="zstsVldnErrLogDAO"
+		class="com.kohls.mdr.error.notification.dao.impl.ZstsVldnErrLogDaoImpl"
+		scope="step">
+		<property name="entityDAO" ref="entityDAO" />
+	</bean>
+
+	<bean id="entityDAO" class="com.kohls.mdr.error.notification.dao.impl.EntityDaoImpl"
+		scope="step">
+	</bean>
+
+	<bean id="jobListener"
+		class="com.kohls.mdr.error.notification.listener.ErrorNotificationJobListener">
+		<property name="stopWatch" ref="stopWatch" />
+	</bean>
+
+	<bean id="errorNotificationSkipCheckingListener"
+		class="com.kohls.mdr.error.notification.listener.ErrorNotificationSkipCheckingListener" />
+
+	<bean id="stopWatch" class="org.springframework.util.StopWatch">
+		<constructor-arg value="MDR-Error-Notification-Job" />
+	</bean>
+	
+	<bean id="skipObserver" class="com.kohls.mdr.error.notification.util.SkipObserver">
+	</bean>
+
+	<bean id="taskletExecutionDecider"
+		class="com.kohls.mdr.error.notification.util.TaskletExecutionDecider">
+		<property name="skipObserver" ref="skipObserver" />
+	</bean>
+
+	<bean id="fileTransferTasklet"
+		class="com.kohls.mdr.error.notification.tasklet.MdrErrorNotificationFileTransfer">
+		<property name="command"
+			value="${mdr.error.notification.excel.xls.file.transfer}" />
+		<property name="to" value="${mdr.error.notification.to}" />
+		<property name="from" value="${mdr.error.notification.from}" />
+		<property name="host" value="${mdr.error.notification.host}" />
+		<property name="subject" value="${mdr.error.notification.subject}" />
+		<property name="body2" value="${mdr.error.notification.body2}" />
+		<property name="body3" value="${mdr.error.notification.body3}" />
+		<property name="body4" value="${mdr.error.notification.body4}" />
+		<property name="body5" value="${mdr.error.notification.body5}" />
+		<property name="body6" value="${mdr.error.notification.body6}" />
+	</bean>
+
+	<bean id="logTasklet"
+		class="com.kohls.mdr.error.notification.tasklet.MdrErrorNotificationExcelFileLogTasklet">
+	</bean>
+
+	<batch:job id="mdrErrorNotificationJob" job-repository="jobRepository"
+		parent="simpleJob">
+		<batch:step id="mdrErrorNotificationStep" next="decision">
+			<batch:tasklet transaction-manager="transactionManager">
+				<batch:chunk reader="itemReader" processor="mdrErrorNotificationProcessor"
+					writer="itemWriter" commit-interval="${mdr.error.notification.commit-interval}"
+					skip-limit="${mdr.error.notification.skip}">
+					<batch:skippable-exception-classes>
+						<batch:include
+							class="com.kohls.mdr.error.notification.exception.MDRException" />
+					</batch:skippable-exception-classes>
+				</batch:chunk>
+				<batch:listeners>
+					<batch:listener ref="jobListener" />
+					<batch:listener ref="errorNotificationSkipCheckingListener" />
+				</batch:listeners>
+			</batch:tasklet>
+		</batch:step>
+
+
+		<batch:decision id="decision" decider="taskletExecutionDecider">
+			<batch:next on="COMPLETED" to="fileTransferTaskletStep" />
+			<batch:next on="FAILED" to="logTaskletStep" />
+		</batch:decision>
+
+
+		<batch:step id="fileTransferTaskletStep">
+			<batch:tasklet ref="fileTransferTasklet">
+			</batch:tasklet>
+		</batch:step>
+		<batch:step id="logTaskletStep">
+			<batch:tasklet ref="logTasklet">
+			</batch:tasklet>
+		</batch:step>
+
+		<batch:listeners>
+			<batch:listener ref="jobListener" />
+		</batch:listeners>
+	</batch:job>
+</beans>

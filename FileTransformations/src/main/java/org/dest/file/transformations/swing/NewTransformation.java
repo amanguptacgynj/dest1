@@ -28,7 +28,7 @@ public class NewTransformation extends JFrame {
         frameNewTransformation.setLayout(null);
         frameNewTransformation.setLocationRelativeTo(null) ;
         
-        JLabel labelNumberOfColumns = new JLabel("Enter Number of columns/fields per record");
+        JLabel labelNumberOfColumns = new JLabel("Number of input columns/fields per record");
         labelNumberOfColumns.setFont(new Font("Times New Roman", Font.PLAIN, 14));
         labelNumberOfColumns.setBounds(10, 10, 320, 30) ;
         frameNewTransformation.add(labelNumberOfColumns) ;
@@ -37,7 +37,7 @@ public class NewTransformation extends JFrame {
         textNumberOfColumns.setBounds(10,35,100,30);
         frameNewTransformation.add(textNumberOfColumns);
 
-        JLabel labelDelimiter = new JLabel("Enter the delimiter(e.g. | or ,)");
+        JLabel labelDelimiter = new JLabel("Enter the input file delimiter(e.g. | or ,)");
         labelDelimiter.setFont(new Font("Times New Roman", Font.PLAIN, 14));
         labelDelimiter.setBounds(10, 60, 320, 30) ;
         frameNewTransformation.add(labelDelimiter) ;
