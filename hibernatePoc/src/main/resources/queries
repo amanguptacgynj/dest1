@@ -1,0 +1,18 @@
+DRIVER : org.hsqldb.jdbcDriver
+URL : jdbc:hsqldb:mem:.
+USER : SA
+PASSWORD :
+
+create table department
+(
+ID INT PRIMARY KEY,
+NAME VARCHAR(50)
+)
+
+create table employee
+(
+ID INT PRIMARY KEY,
+FIRSTNAME VARCHAR(50),
+LASTNAME VARCHAR(50)
+)
+
